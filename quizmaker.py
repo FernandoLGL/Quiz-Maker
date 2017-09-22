@@ -18,15 +18,11 @@ def get_answers(file):
         yield elem[1]
 
 
-def get_optionslist(file):
+def get_options(file):
     # yields each element of a list which includes lists of each question's options
     for elem in get_sets(file):
-        yield elem[2:]
-
-
-def get_options(file):
-    for elem in next(get_optionslist(file)):
-        yield elem
+        for el in elem[2:]:
+            yield el
 
 
 def menu():
@@ -44,13 +40,12 @@ def menu():
     number_of_questions = len(list(get_questions(f)))
     correct = 0
 
-    # while True:
-    #     for question in get_questions(f):
-    #         print(question)
-    #         for count, option in enumerate(get_options(f)):
-    #             # Lembrar depois de importar o alfabeto pra colocar as letras
-    #             print(str(count + 1) + '. ' + option)
-    #         choice = input("What's the answer?")
+    while True:
+        for question in get_questions(f):
+            print(question)
+            for count, option in enumerate(get_options(f)):
+                print(str(count + 1) + '. ' + option)
+            choice = input("What's the answer?")
 
 
 menu()
