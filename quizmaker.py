@@ -1,30 +1,37 @@
 from random import shuffle
+import os
+import sys
 
 
-def get_sets(file):  # generator that yields each set of question/answer/options
+class Question(object):
+
+    def __init__(self, question, answer, options):
+        self.question = question
+        self.answer = answer
+        self.options = options
+
+
+def get_sets(file):
     file.seek(0)
+    out = []
     t = file.read().split("\n")[:-1]
     for elem in t:
-        yield elem.split('--')
+        out.append(elem.split('--'))
+    return out
 
 
-def get_questions(file):  # generator that yields the questions
-    for elem in get_sets(file):
-        yield elem[0]
-
-
-def get_answers(file):
-    for elem in get_sets(file):
-        yield elem[1]
-
-
-def get_options(file):
-    # yields 'n' lists which are the options for 'n' questions.
-    for elem in get_sets(file):
-        yield elem[2:]
+def clear_screen():
+    '''
+    Clear screen
+    '''
+    if sys.platform == "linux" or sys.platform == "linux2":
+        os.system('clear')
+    elif sys.platform == "win32":
+        os.system('cls')
 
 
 def menu():
+    # Handling the file at the beginning
     try:
         a = open('scores.txt', 'r')
         reading = a.read()
@@ -36,12 +43,24 @@ def menu():
         f = open('scores.txt', 'w+')
         return
 
-    while True:
-        number_of_questions = len(list(get_questions(f)))
-        correct = 0
-        while True:
-            for question in get_questions(f):
-                print(question)
+    sets = get_sets(f)
+    correct = 0
+    number_of_questions = len(sets)
+
+    while sets != []:
+        clear_screen()
+        q = Question(sets[-1][0], sets[-1][1], sets[-1][2:])
+        sets.pop()
+        print (q.question)
+        for count, option in enumerate(q.options):
+            print(str(count + 1) + ". " + option)
+        answer = input("What's your answer? Pick a number.\n")
+        if answer == q.answer:
+            correct += 1
+
+    total = (correct / number_of_questions) * 10
+
+    print("\nYour grade: ", total, "\nNumber of correct answers:", correct, 'out of', number_of_questions)
 
 
 menu()
