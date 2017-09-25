@@ -19,10 +19,9 @@ def get_answers(file):
 
 
 def get_options(file):
-    # yields each element of a list which includes lists of each question's options
+    # yields 'n' lists which are the options for 'n' questions.
     for elem in get_sets(file):
-        for el in elem[2:]:
-            yield el
+        yield elem[2:]
 
 
 def menu():
@@ -37,15 +36,12 @@ def menu():
         f = open('scores.txt', 'w+')
         return
 
-    number_of_questions = len(list(get_questions(f)))
-    correct = 0
-
     while True:
-        for question in get_questions(f):
-            print(question)
-            for count, option in enumerate(get_options(f)):
-                print(str(count + 1) + '. ' + option)
-            choice = input("What's the answer?")
+        number_of_questions = len(list(get_questions(f)))
+        correct = 0
+        while True:
+            for question in get_questions(f):
+                print(question)
 
 
 menu()
