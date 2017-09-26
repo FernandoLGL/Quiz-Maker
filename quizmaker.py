@@ -57,6 +57,7 @@ def menu():
 
     while sets != []:
         clear_screen()
+        shuffle(sets) #randomize
         q = Question(sets[-1][0], sets[-1][1], sets[-1][2:])  # Always using the last 'set' as a reference
         sets.pop()  # We are treating 'sets' as a stack. Popping and not caring about the return.
         print (q.question)
